@@ -51,7 +51,7 @@ Change `'INSERT-DESIRED-LANGUAGE-CODE'` to the desired language code (ISO 639-1 
 
 ### Running the Script
 
-After configuring the script, you can run it from the command line:
+After configuring the script, you can double click or run it from the command line:
 ```bash
 python Filter.py
 ```
