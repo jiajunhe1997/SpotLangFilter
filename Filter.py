@@ -1,3 +1,27 @@
+import subprocess
+import pkg_resources
+import logging
+
+required_packages = {
+    'spotipy': 'spotipy',
+    'lyricsgenius': 'lyricsgenius',
+    'langdetect': 'langdetect'
+}
+
+def check_and_install_dependencies():
+    installed_packages = {pkg.key for pkg in pkg_resources.working_set}
+    missing_packages = required_packages.keys() - installed_packages
+    if missing_packages:
+        logging.info("Installing missing packages...")
+        python = sys.executable
+        subprocess.check_call([python, '-m', 'pip', 'install', *missing_packages], stdout=subprocess.DEVNULL)
+    logging.info("All dependencies are installed.")
+
+# Setup logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+check_and_install_dependencies()
+
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import lyricsgenius
