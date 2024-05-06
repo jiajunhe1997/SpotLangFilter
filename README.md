@@ -1,6 +1,6 @@
 # Filter.py
 
-`Filter.py` is a Python script designed to filter songs from a Spotify playlist based on the language of their lyrics, using the Spotify and Genius APIs. This script is particularly useful for users who wish to create a version of a playlist that excludes songs in a specific language, such as Spanish.
+`Filter.py` is a Python script designed to filter songs from a Spotify playlist based on the language of their lyrics, using the Spotify and Genius APIs. This script is particularly useful for users who wish to create a version of a playlist that excludes songs in a specific language.
 
 ## Getting Started
 
