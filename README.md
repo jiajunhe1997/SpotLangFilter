@@ -1,4 +1,4 @@
-#  Spotify Filter Playlist byLanguage
+# SpotLangFilter: Filter Spotify playlist by language
 
 This script removes songs of a certain language from an existing playlist by creating a new one without it. It uses the Spotify API to access playlists and track information, the Genius API to fetch song lyrics, and the `langdetect` library to determine the language of the lyrics.
 
