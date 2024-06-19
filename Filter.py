@@ -7,21 +7,19 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import lyricsgenius
 from langdetect import detect
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-## EDIT HERE
-# Spotify and Genius clients setup
+# Language to filter
+filter_language_code = 'FILTERLANGUAGECODE'  # Set the desired language code (e.g., 'en' for English, 'es' for Spanish)
+
+# Your source Spotify playlist ID: (Hint: Common playlist IDs: Billboard Hot 100: 6UeSakyzhiEt4NB3UAd6NQ Spotify Top 50 Global: 37i9dQZEVXbMDoHDwVN2tF)
+original_playlist_id = '37i9dQZEVXbMDoHDwVN2tF' # Currently Global Top 50, replace with your source playlist
+
+# Spotify and Genius API setup
 client_id = 'YOURID'
 client_secret = 'YOURSECRET'
 genius_token = 'YOURTOKEN'
 redirect_uri = 'http://localhost:8888/callback'
-
-# Your source Spotify playlist ID:
-
-original_playlist_id = 'IDHERE'
-
-# Common playlist IDs:
-# Billboard Hot 100: 6UeSakyzhiEt4NB3UAd6NQ
-# Spotify Top 50 Global: 37i9dQZEVXbMDoHDwVN2tF
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%H:%M:%S')
@@ -73,10 +71,9 @@ def save_cache(cache):
             cache_entry = {"key": key, "language": language}
             file.write(json.dumps(cache_entry) + '\n')
 
-
 # Function to get or create playlist
 def get_or_create_playlist(user_id, playlist_name, sp):
-    playlists = sp.current_user_playlists(limit=1)
+    playlists = sp.current_user_playlists(limit=50)
     for playlist in playlists['items']:
         if playlist['name'] == playlist_name:
             # Clear existing playlist
@@ -130,11 +127,16 @@ def main():
     track_items = sp.playlist_items(original_playlist_id, additional_types=('track',))['items']
     tracks_to_add = []
     
-    for item in track_items:
-        track = item['track']
-        language = fetch_and_analyze_lyrics(track['name'], track['artists'][0]['name'], cache)
-        if language != 'es':  # Assuming you're filtering out Spanish songs
-            tracks_to_add.append(track['id'])
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        future_to_track = {executor.submit(fetch_and_analyze_lyrics, item['track']['name'], item['track']['artists'][0]['name'], cache): item['track']['id'] for item in track_items}
+        for future in as_completed(future_to_track):
+            track_id = future_to_track[future]
+            try:
+                language = future.result()
+                if language != filter_language_code:  # Use the user-configurable filter language code
+                    tracks_to_add.append(track_id)
+            except Exception as e:
+                logging.error(f"Error processing track: {e}")
 
     if tracks_to_add:
         sp.playlist_add_items(playlist_id, tracks_to_add)
