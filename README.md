@@ -1,63 +1,90 @@
-# Filter.py
+# Spotify Playlist Language Filter
 
-`Filter.py` is a Python script designed to filter songs from a Spotify playlist based on the language of their lyrics, using the Spotify and Genius APIs. This script is particularly useful for users who wish to create a version of a playlist that excludes songs in a specific language.
+This script removes songs of a certain language from an existing playlist by creating a new one without it. It uses the Spotify API to access playlists and track information, the Genius API to fetch song lyrics, and the `langdetect` library to determine the language of the lyrics.
 
-## Getting Started
+## Features
 
-### Prerequisites
+- Fetches songs from a specified Spotify playlist.
+- Retrieves lyrics for each song using the Genius API.
+- Detects the language of the lyrics.
+- Filters songs based on a specified language code.
+- Creates a new Spotify playlist with only the songs that match the desired language.
+- Caches lyrics language detection results to minimize redundant API calls.
+- Uses parallel processing to speed up lyrics fetching and analysis.
 
-Before you can use `Filter.py`, you need to have Python and pip installed on your system. If you do not have these installed, follow these steps:
+## Requirements
 
-#### Install Python
-1. Visit the official [Python website](https://www.python.org/downloads/).
-2. Download the latest version of Python for your operating system.
-3. Run the installer. Ensure that you check the box that says "Add Python to PATH" before clicking "Install Now."
+- Python 3.6 or higher (Might work on 3.6 or below, I never tested ¯\_(ツ)_/¯)
+- Spotify Developer Account
+- Genius API Token
 
-#### Install pip
-Pip is included by default with Python 3.4 and later. If you need to upgrade or install pip, you can do so by running:
-```bash
-python -m ensurepip --upgrade
+## Installation
+
+1. **Clone the repository:**
+
+   ```sh
+   git clone https://github.com/your-username/spotify-playlist-language-filter.git
+   cd spotify-playlist-language-filter
+   ```
+
+2. **Install dependencies:**
+
+   The script checks and installs the required packages automatically. However, you can manually install them using pip:
+
+   ```sh
+   pip install spotipy lyricsgenius langdetect
+   ```
+
+3. **Update the script with your settings:**
+
+   Open `filter.py` and update the following variables:
+   
+   - `filter_language_code`: Set the desired language code (e.g., `'en'` for English, `'es'` for Spanish).
+   - `original_playlist_id`: Set the Spotify playlist ID you want to filter.
+   - `client_id`, `client_secret`, `genius_token`, `redirect_uri`: Set your Spotify and Genius API credentials.
+
+## Usage
+
+Run the script:
+
+```sh
+python filter.py
 ```
 
-### Setting Up Developer Accounts
+The script will:
+1. Load the cache from `song_language_cache.json`.
+2. Fetch the songs from the specified Spotify playlist.
+3. Retrieve lyrics for each song using the Genius API.
+4. Detect the language of the lyrics.
+5. Create a new Spotify playlist containing only the songs that match the specified language.
+6. Save the language detection results to the cache file.
 
-#### Spotify Developer Account
-1. Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/).
-2. Log in with your Spotify account or create a new one if necessary.
-3. Click "Create an App". Provide an app name and description, then agree to the terms.
-4. Note the `Client ID` and `Client Secret`.
+## Configuration
 
-#### Genius API Account
-1. Visit the [Genius API clients page](https://genius.com/api-clients).
-2. Sign in with your Genius account or create one.
-3. Create a new API client. Note the `Client Access Token`.
+- **Logging:** The script uses Python's `logging` module for logging information, warnings, and errors. By default, it logs to the console with the `INFO` level.
 
-### Configuring the Script
+- **Cache:** The cache file (`song_language_cache.json`) stores the language detection results to minimize redundant API calls. Each entry is stored as a JSON object on a new line for easy readability.
 
-#### Obtain and Set Credentials
-You need to edit `Filter.py` to include your Spotify and Genius credentials, along with a redirect URI used for the Spotify authentication process:
+## File Structure
 
-1. Open `Filter.py` with a text editor.
-2. Locate the section where `client_id`, `client_secret`, `genius_token`, and `redirect_uri` are defined.
-3. Replace the placeholder values with your actual Spotify and Genius credentials.
-4. Ensure the `redirect_uri` matches the one configured in your Spotify app, such as `http://localhost:8888/callback`.
-
-#### Set the Desired Language to Filter
-Locate the line that checks the language:
-```python
-if language != 'INSERT-DESIRED-LANGUAGE-CODE':
-```
-Change `'INSERT-DESIRED-LANGUAGE-CODE'` to the desired language code (ISO 639-1 Code), such as `'en'` for English or `'es'` for Spanish.
-
-### Running the Script
-
-After configuring the script, you can double click or run it from the command line:
-```bash
-python Filter.py
-```
-
-The script will authenticate with Spotify and Genius, fetch the playlist items, check the lyrics' language, and create a new playlist excluding songs in the specified language.
+- `filter.py`: The main script that performs the filtering.
+- `song_language_cache.json`: The cache file storing language detection results.
+- `README.md`: This file.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and create a pull request with your changes.
+
+## Acknowledgements
+
+- [Spotipy](https://github.com/plamere/spotipy): A lightweight Python library for the Spotify Web API.
+- [lyricsgenius](https://github.com/johnwmillr/LyricsGenius): A Python client for the Genius API.
+- [langdetect](https://pypi.org/project/langdetect/): A port of Google's language-detection library.
+
+## Contact
+
+For any questions or suggestions, please open an issue on GitHub.
