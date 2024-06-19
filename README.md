@@ -18,26 +18,36 @@ This script removes songs of a certain language from an existing playlist by cre
 - Spotify Developer Account
 - Genius API Token
 
+## Setting Up Developer Accounts
+
+### Spotify Developer Account
+1. Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/).
+2. Log in with your Spotify account or create a new one if necessary.
+3. Click "Create an App". Provide an app name and description, then agree to the terms.
+4. Note the `Client ID` and `Client Secret`.
+
+### Genius API Account
+1. Visit the [Genius API clients page](https://genius.com/api-clients).
+2. Sign in with your Genius account or create one.
+3. Create a new API client. Note the `Client Access Token`.
+
 ## Installation
 
-1. **Clone the repository:**
+1. **Download Filter.py:**
 
-   ```sh
-   git clone https://github.com/your-username/spotify-playlist-language-filter.git
-   cd spotify-playlist-language-filter
-   ```
+   Download Filter.py from latest release.
 
-2. **Install dependencies:**
+3. **Install dependencies:**
 
-   The script checks and installs the required packages automatically. However, you can manually install them using pip:
+   Filter.py checks and installs the required packages automatically. However, you can manually install them using pip, just to be safe:
 
    ```sh
    pip install spotipy lyricsgenius langdetect
    ```
 
-3. **Update the script with your settings:**
+4. **Update the script with your settings:**
 
-   Open `filter.py` and update the following variables:
+   Open `filter.py` in your editor and update the following variables:
    
    - `filter_language_code`: Set the desired language code (e.g., `'en'` for English, `'es'` for Spanish).
    - `original_playlist_id`: Set the Spotify playlist ID you want to filter.
