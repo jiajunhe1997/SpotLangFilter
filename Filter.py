@@ -45,6 +45,9 @@ required_packages = {
     'langdetect': 'langdetect'
 }
 
+#Display filter language
+print(f"Language filter set to: {filter_language_code}")
+
 def check_and_install_dependencies():
     installed_packages = {pkg.key for pkg in pkg_resources.working_set}
     missing_packages = required_packages.keys() - installed_packages
